@@ -440,6 +440,69 @@ $
     ))
 ]
 
+== Exceptions
+
+=== Operational semantics
+
+#align(center)[
+    #box(prooftree(
+      axiom($M -> M'$),
+      rule(label: "(Try)", $try M catch N -> try M' catch N$)
+    ))
+    #box(prooftree(
+      axiom(""),
+      rule(label: "  (Try Handle)", $try throw v catch M -> M app v$)
+    ))
+    #box(prooftree(
+      axiom(""),
+      rule(label: "(Try Val)", $try v catch M -> v$)
+    ))
+
+    #box(prooftree(
+      axiom($M -> M'$),
+      rule(label: "(Raise 1)", $throw M -> throw M'$)
+    ))
+    #box(prooftree(
+      axiom(""),
+      rule(label: "  (Raise 2)", $throw (throw v) -> throw v$)
+    ))
+    #box(prooftree(
+      axiom(""),
+      rule(label: "(Raise App 1)", $(throw v) app M -> throw v$)
+    ))
+    #box(prooftree(
+      axiom(""),
+      rule(label: "  (Raise App 2)", $v_1 app (throw v_2) -> throw v_2$)
+    ))
+    #box(prooftree(
+      axiom(""),
+      rule(label: "(Raise IfElse)", $mif throw v then M melse N -> throw v$)
+    ))
+
+    #box(prooftree(
+      axiom(""),
+      rule(label: "(Raise Sum 1)", $throw v + M -> throw v$)
+    ))
+    #box(prooftree(
+      axiom(""),
+      rule(label: "  (Raise Sum 2)", $v_1 + throw v_2 -> throw v_2$)
+    ))
+]
+
+=== Typing
+#align(center)[
+    #box(prooftree(
+      axiom($Gamma tack.r M : T_exn$),
+      rule(label: "(T-Raise)", $Gamma tack.r throw M : T$)
+    ))
+
+    #box(prooftree(
+      axiom($Gamma tack.r M : T$),
+      axiom($Gamma tack.r N : T_exn -> T$),
+      rule(n:2, label: "(T-Try)", $Gamma tack.r try M catch N : T$)
+    ))
+]
+
 == Definitions and stuff
 
 - *$alpha$ equivalence*: Terms that differ only in the names of bound
